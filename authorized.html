@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+
+      body {
+        background-color: gold;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      button {
+        border: 2px solid #000;
+        border-radius: 10px;
+        background-color: blue;
+        color: white;
+        padding: 10px;
+        margin: 10px;
+      }
+
+      button:hover {
+        background-color: black;
+        cursor: pointer;
+      }
+
+      #inProgress {
+        font-weight: bold;
+        text-align: center;
+        margin: 10px;
+        padding: 5px;
+        display: none;
+      }
+
+    </style>
+    <script>
+
+      function disableButtons() {
+        const buttons = document.getElementsByTagName("button");
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].style.display = "none";
+          //buttons[i].disabled = true;
+        }
+        document.getElementById("inProgress").style.display = "block";
+      }
+
+      function enableButtons() {
+        const buttons = document.getElementsByTagName("button");
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].style.display = "inline";
+          //buttons[i].disabled = false;
+        }
+        document.getElementById("inProgress").style.display = "none";
+      }
+
+      function obtainData() {
+          disableButtons();
+          google.script.run.withSuccessHandler(data => {
+            enableButtons();
+          }).withFailureHandler(data => {
+            enableButtons();
+          }).makeRequest();
+      }
+
+      function generateData() {
+        disableButtons();
+        google.script.run.withSuccessHandler(data => {
+          enableButtons();
+        }).withFailureHandler(data => {
+          enableButtons();
+        }).generateTestData();
+      }
+
+      function logout() {
+        google.script.run.withSuccessHandler(data => {
+
+        }).resetService();
+        google.script.run.withSuccessHandler(data => {
+
+        }).showAddOn();
+      }
+
+      function setCloudID(selectedInstanceName) {
+        google.script.run.withSuccessHandler(data => {
+
+        }).setCloudIDFromInstanceName(selectedInstanceName);
+      }
+
+      function getInstances() {
+        google.script.run.withSuccessHandler(function(instanceNames) {
+          var sel = document.getElementById("instances");
+          for (var i = 0; i < instanceNames.length; i++) {
+            var opt = document.createElement('option');
+            opt.appendChild( document.createTextNode(instanceNames[i]) );
+            opt.value = instanceNames[i];
+            sel.appendChild(opt); 
+          }
+        }).withFailureHandler(function(data) {
+          document.write("Oops! Something has gone wrong! :(");
+        }).getAllAccessibleInstanceNames();
+      }
+
+      function deleteData() {
+        disableButtons();
+        google.script.run.withSuccessHandler(data => {
+          enableButtons();
+        }).withFailureHandler(data => {
+          enableButtons();
+        }).deleteTestData();
+      }
+
+      function generateEvaluateAndDeleteData() {
+        disableButtons();
+        google.script.run.withSuccessHandler(data => {
+          enableButtons();
+        }).withFailureHandler(data => {
+          enableButtons();
+        }).generateEvaluateAndDeleteTestData();
+      }
+  
+    </script>
+  </head>
+  <body onload="getInstances()">
+    <h1>Authorization successful!</h1>
+    <div style="text-align: center;">
+      <label for="instances" style="text-align: center;">Choose an instance to operate on!</label>
+      <select id="instances" onchange="setCloudID(this.options[this.selectedIndex].value)">
+      
+      </select>
+    </div>
+    <div style="text-align: center;">
+      <button id="btn" class="button" onclick="obtainData()">Get custom field data</button>
+    </div>
+    <div style="text-align: center;">
+      <button id="generator" class="button" onclick="generateData()">Generate test data</button>
+      <button id="delete" class="button" onclick="deleteData()">Delete test data</button>
+    </div>
+    <div style="text-align: center;">
+      <button id="generateAndDelete" class="button" onclick="generateEvaluateAndDeleteData()">Generate, evaluate and delete test data</button>
+    </div>
+    <div style="text-align: center;">
+      <button id="logoutbtn" class="button" onclick="logout()">Log out</button>
+    </div>
+    <div id="inProgress">Work in progress... Please wait</div>
+  </body>
+</html>
