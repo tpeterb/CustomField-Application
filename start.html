@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        background-color: gold;
+      }
+
+      #start {
+        text-align: center;
+      }
+
+      #auth_button {
+        background-color: blue;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        margin: 10px;
+      }
+
+      #auth_button:hover {
+        background-color: black;
+        color: white;
+        cursor: pointer;
+      }
+    </style>
+    <script>
+      
+      function authenticate() {
+        google.script.run.withSuccessHandler(data => {
+          console.log("Success!");
+        }).showSidebar()
+      }
+
+    </script>
+  </head>
+  <body>
+    <h1 id="start">Starting page</h1>
+    <div style="text-align: center;">
+      <button type="button" id="auth_button" onclick="authenticate()">Authentication</button>
+    </div>
+  </body>
+</html>
