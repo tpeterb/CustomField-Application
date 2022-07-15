@@ -202,7 +202,7 @@ function populateSheet() {
 
 function showAddOn() {
   
-  var htmlForSidebar = HtmlService.createTemplateFromFile("design");
+  var htmlForSidebar = HtmlService.createTemplateFromFile("start");
   var htmlOutput = htmlForSidebar.evaluate();
   htmlOutput.setTitle("Custom field statistics");
 
